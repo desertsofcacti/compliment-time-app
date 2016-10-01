@@ -1,10 +1,10 @@
-# Brunch + React + Babel/ES6
+# Brunch + React + Babel/ES6 + Express
 
-This is a modern JS skeleton with React for [Brunch](http://brunch.io).
+This is a modern JS skeleton with React using [Brunch](http://brunch.io).
 
 ## Installation
 
-Clone this repo manually or use `brunch new dir -s brunch/with-react`
+Clone this repo manually
 
 ## Getting started
 
@@ -15,6 +15,8 @@ Clone this repo manually or use `brunch new dir -s brunch/with-react`
 * Run:
     * `brunch watch --server` — watches the project with continuous rebuild. This will also launch HTTP server with [pushState](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history).
     * `brunch build --production` — builds minified project for production
+* Production:
+    * web: node app.js
 * Learn:
     * `public/` dir is fully auto-generated and served by HTTP server.  Write your code in `app/` dir.
     * Place static files you want to be copied from `app/assets/` to `public/`.
