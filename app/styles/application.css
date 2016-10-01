@@ -8,6 +8,10 @@
   margin: 0 auto;
 }
 
+body {
+  background-color: #001F3F;
+}
+
 h1 {
   margin-bottom: 0.5em;
   font-size: 5em;
@@ -25,4 +29,26 @@ a {
 a:hover {
   color: #27552e;
   border-bottom: 1px solid #27552e;
+}
+
+compliment {
+  margin-top: 100px;
+  height: 10em;
+  display: flex;
+  align-items: center;
+  justify-content: center
+  font-family: helvetica;
+  color: #F012BE;
+  font-size: 3em;
+  font-weight: bold;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+
+compliment:hover {
+  cursor: pointer;
 }
