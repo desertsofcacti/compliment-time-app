@@ -1,10 +1,4 @@
-module.exports = function (port, path, callback) {
-
-  const myServer = http.createServer();
-  myServer.listen(port, callback);
-  myServer.on('request', function (req, res));
-  return myServer;
-  },
+module.exports = {
 
   files: {
     javascripts: {
@@ -20,4 +14,12 @@ module.exports = function (port, path, callback) {
   plugins: {
       babel: {presets: ['es2015', 'react']}
     }
-  };
+};
+
+  // module.exports = function (port, path, callback) {
+  //   const myServer = http.createServer();
+  //   myServer.listen(port, callback);
+  //   myServer.on('request', function (req, res) {
+  //     return myServer;
+  //   });
+  // }
