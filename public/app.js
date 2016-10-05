@@ -1,1 +1,425 @@
-!function(){"use strict";var e="undefined"==typeof window?global:window;if("function"!=typeof e.require){var t={},r={},n={},o={}.hasOwnProperty,i=/^\.\.?(\/|$)/,u=function(e,t){for(var r,n=[],o=(i.test(t)?e+"/"+t:t).split("/"),u=0,a=o.length;u<a;u++)r=o[u],".."===r?n.pop():"."!==r&&""!==r&&n.push(r);return n.join("/")},a=function(e){return e.split("/").slice(0,-1).join("/")},c=function(t){return function(r){var n=u(a(t),r);return e.require(n,t)}},l=function(e,t){var n=null;n=v&&v.createHot(e);var o={id:e,exports:{},hot:n};return r[e]=o,t(o.exports,c(e),o),o.exports},s=function(e){return n[e]?s(n[e]):e},f=function(e,t){return s(u(a(e),t))},p=function(e,n){null==n&&(n="/");var i=s(e);if(o.call(r,i))return r[i].exports;if(o.call(t,i))return l(i,t[i]);throw new Error("Cannot find module '"+e+"' from '"+n+"'")};p.alias=function(e,t){n[t]=e};var d=/\.[^.\/]+$/,m=/\/index(\.[^\/]+)?$/,h=function(e){if(d.test(e)){var t=e.replace(d,"");o.call(n,t)&&n[t].replace(d,"")!==t+"/index"||(n[t]=e)}if(m.test(e)){var r=e.replace(m,"");o.call(n,r)||(n[r]=e)}};p.register=p.define=function(e,n){if("object"==typeof e)for(var i in e)o.call(e,i)&&p.register(i,e[i]);else t[e]=n,delete r[e],h(e)},p.list=function(){var e=[];for(var r in t)o.call(t,r)&&e.push(r);return e};var v=e._hmr&&new e._hmr(f,p,t,r);p._cache=r,p.hmr=v&&v.wrap,p.brunch=!0,e.require=p}}(),function(){var e;window;require.register("components/App.jsx",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function u(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(e,"__esModule",{value:!0});var a=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),c=t("react"),l=n(c),s=function(e){function t(){return o(this,t),i(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return u(t,e),a(t,[{key:"render",value:function(){return l["default"].createElement("div",{id:"content"},l["default"].createElement("compliment",null,"Go You"))}}]),t}(l["default"].Component);e["default"]=s}),require.register("components/compliments.jsx",function(e,t,r){"use strict";var n=["You have cool hair","You are nice to be around","You make the world shine","You make everything better","Your smile makes others feel happy","I like you","You have cool shoes","You have a great smile","You have great style","You are patient","You are kind","You are good at parallel parking","You make yummy food","You are smart","You are a good listener","You are intentional","You are fun to be around","You have many positive characteristics","It is magical to be with you","You light up the room. Literally","You are the best part of someones day","You make cool things"],o=Math.floor(Math.random()*n.length),i=n[o];document.getElementById("compliment").innerHTML=i}),require.register("components/index.jsx",function(e,t,r){"use strict"}),require.register("initialize.js",function(e,t,r){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}var o=t("react-dom"),i=n(o),u=t("react"),a=n(u),c=t("components/App"),l=n(c);document.addEventListener("DOMContentLoaded",function(){i["default"].render(a["default"].createElement(l["default"],null),document.querySelector("#app"))})}),require.register("socket.js",function(e,t,r){"use strict";var n=io();n.on("server event",function(e){console.log(e),n.emit("client event",{socket:"io"})})}),require.alias("process/browser.js","process"),e=require("process"),require.register("___globals___",function(e,t,r){})}(),require("___globals___");
+(function() {
+  'use strict';
+
+  var globals = typeof window === 'undefined' ? global : window;
+  if (typeof globals.require === 'function') return;
+
+  var modules = {};
+  var cache = {};
+  var aliases = {};
+  var has = ({}).hasOwnProperty;
+
+  var expRe = /^\.\.?(\/|$)/;
+  var expand = function(root, name) {
+    var results = [], part;
+    var parts = (expRe.test(name) ? root + '/' + name : name).split('/');
+    for (var i = 0, length = parts.length; i < length; i++) {
+      part = parts[i];
+      if (part === '..') {
+        results.pop();
+      } else if (part !== '.' && part !== '') {
+        results.push(part);
+      }
+    }
+    return results.join('/');
+  };
+
+  var dirname = function(path) {
+    return path.split('/').slice(0, -1).join('/');
+  };
+
+  var localRequire = function(path) {
+    return function expanded(name) {
+      var absolute = expand(dirname(path), name);
+      return globals.require(absolute, path);
+    };
+  };
+
+  var initModule = function(name, definition) {
+    var hot = null;
+    hot = hmr && hmr.createHot(name);
+    var module = {id: name, exports: {}, hot: hot};
+    cache[name] = module;
+    definition(module.exports, localRequire(name), module);
+    return module.exports;
+  };
+
+  var expandAlias = function(name) {
+    return aliases[name] ? expandAlias(aliases[name]) : name;
+  };
+
+  var _resolve = function(name, dep) {
+    return expandAlias(expand(dirname(name), dep));
+  };
+
+  var require = function(name, loaderPath) {
+    if (loaderPath == null) loaderPath = '/';
+    var path = expandAlias(name);
+
+    if (has.call(cache, path)) return cache[path].exports;
+    if (has.call(modules, path)) return initModule(path, modules[path]);
+
+    throw new Error("Cannot find module '" + name + "' from '" + loaderPath + "'");
+  };
+
+  require.alias = function(from, to) {
+    aliases[to] = from;
+  };
+
+  var extRe = /\.[^.\/]+$/;
+  var indexRe = /\/index(\.[^\/]+)?$/;
+  var addExtensions = function(bundle) {
+    if (extRe.test(bundle)) {
+      var alias = bundle.replace(extRe, '');
+      if (!has.call(aliases, alias) || aliases[alias].replace(extRe, '') === alias + '/index') {
+        aliases[alias] = bundle;
+      }
+    }
+
+    if (indexRe.test(bundle)) {
+      var iAlias = bundle.replace(indexRe, '');
+      if (!has.call(aliases, iAlias)) {
+        aliases[iAlias] = bundle;
+      }
+    }
+  };
+
+  require.register = require.define = function(bundle, fn) {
+    if (typeof bundle === 'object') {
+      for (var key in bundle) {
+        if (has.call(bundle, key)) {
+          require.register(key, bundle[key]);
+        }
+      }
+    } else {
+      modules[bundle] = fn;
+      delete cache[bundle];
+      addExtensions(bundle);
+    }
+  };
+
+  require.list = function() {
+    var list = [];
+    for (var item in modules) {
+      if (has.call(modules, item)) {
+        list.push(item);
+      }
+    }
+    return list;
+  };
+
+  var hmr = globals._hmr && new globals._hmr(_resolve, require, modules, cache);
+  require._cache = cache;
+  require.hmr = hmr && hmr.wrap;
+  require.brunch = true;
+  globals.require = require;
+})();
+
+(function() {
+var global = window;
+var process;
+var __makeRelativeRequire = function(require, mappings, pref) {
+  var none = {};
+  var tryReq = function(name, pref) {
+    var val;
+    try {
+      val = require(pref + '/node_modules/' + name);
+      return val;
+    } catch (e) {
+      if (e.toString().indexOf('Cannot find module') === -1) {
+        throw e;
+      }
+
+      if (pref.indexOf('node_modules') !== -1) {
+        var s = pref.split('/');
+        var i = s.lastIndexOf('node_modules');
+        var newPref = s.slice(0, i).join('/');
+        return tryReq(name, newPref);
+      }
+    }
+    return none;
+  };
+  return function(name) {
+    if (name in mappings) name = mappings[name];
+    if (!name) return;
+    if (name[0] !== '.' && pref) {
+      var val = tryReq(name, pref);
+      if (val !== none) return val;
+    }
+    return require(name);
+  }
+};
+require.register("components/App.jsx", function(exports, require, module) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _reactFetch = require('react-fetch');
+
+var _reactFetch2 = _interopRequireDefault(_reactFetch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var App = function (_React$Component) {
+    _inherits(App, _React$Component);
+
+    function App() {
+        _classCallCheck(this, App);
+
+        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+    }
+
+    _createClass(App, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                _reactFetch2.default,
+                { url: 'https://compliment-time.firebaseio.com/compliments.json' },
+                _react2.default.createElement(ComplimentComponent, null)
+            );
+        }
+    }]);
+
+    return App;
+}(_react2.default.Component);
+
+exports.default = App;
+
+var ComplimentComponent = function (_React$Component2) {
+    _inherits(ComplimentComponent, _React$Component2);
+
+    function ComplimentComponent() {
+        _classCallCheck(this, ComplimentComponent);
+
+        return _possibleConstructorReturn(this, (ComplimentComponent.__proto__ || Object.getPrototypeOf(ComplimentComponent)).apply(this, arguments));
+    }
+
+    _createClass(ComplimentComponent, [{
+        key: 'render',
+        value: function render() {
+            console.log(this.props);
+            return _react2.default.createElement(
+                'div',
+                null,
+                'GO YOU'
+            );
+        }
+    }]);
+
+    return ComplimentComponent;
+}(_react2.default.Component);
+});
+
+;require.register("components/ComplimentComponent.jsx", function(exports, require, module) {
+"use strict";
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ComplimentComponent = _react2.default.createClass({
+    displayName: "ComplimentComponent",
+
+    mixins: [ReactFireMixin],
+
+    getInitialState: function getInitialState() {
+        return {
+            compliments: []
+            //            var randomIndex = Math.floor(Math.random() * textArray.length);
+            //            var randomElement = textArray[randomIndex];
+            //            document.getElementById("compliment-element").innerHTML = randomElement;
+        };
+    },
+
+    componentWillMount: function componentWillMount() {
+        var ref = new Firebase("https://compliment-time.firebaseio.com/compliments");
+        this.bindAsArray(ref, "compliments");
+    },
+
+    render: function render() {
+        var compliments = this.state.compliments.map(function (compliments) {
+            return _react2.default.createElement(
+                "li",
+                { key: compliments['.key'] },
+                compliments.name,
+                " says ",
+                compliments.value,
+                " "
+            );
+        });
+
+        return _react2.default.createElement(
+            "ul",
+            null,
+            compliments
+        );
+    }
+
+});
+});
+
+require.register("components/compliments.jsx", function(exports, require, module) {
+"use strict";
+
+var complimentsArray = ["You have cool hair", "You are nice to be around", "You make the world shine", "You make everything better", "Your smile makes others feel happy", "I like you", "You have cool shoes", "You have a great smile", "You have great style", "You are patient", "You are kind", "You are a sexy parallel parker", "The food you make is DELICIOUS", "You are smart", "You are a good listener", "You are intentional", "You are fun to be around", "You have many positive characteristics", "It is magical to be with you", "You light up the room. Literally", "You are the best part of someones day", "You make cool things", "You are an excellent listener", "You are a non-judgemental person", "You are productive", "You are an encouraging person", "You are an approachable individual", "You turn strangers to friends with ease"];
+
+var randomIndex = Math.floor(Math.random() * textArray.length);
+var randomElement = textArray[randomIndex];
+
+document.getElementById("compliment-element").innerHTML = randomElement;
+});
+
+require.register("components/firebase.jsx", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var App = function (_React$Component) {
+    _inherits(App, _React$Component);
+
+    function App() {
+        _classCallCheck(this, App);
+
+        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+    }
+
+    _createClass(App, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                { id: "content" },
+                _react2.default.createElement(
+                    "compliment-component",
+                    null,
+                    "go you"
+                )
+            );
+        }
+    }]);
+
+    return App;
+}(_react2.default.Component);
+
+exports.default = App;
+
+
+var ComplimentComponent = _react2.default.createClass({
+    displayName: "ComplimentComponent",
+
+    mixins: [ReactFireMixin],
+
+    getInitialState: function getInitialState() {
+        return {
+            compliments: []
+            //            var randomIndex = Math.floor(Math.random() * textArray.length);
+            //            var randomElement = textArray[randomIndex];
+            //            document.getElementById("compliment-element").innerHTML = randomElement;
+        };
+    },
+
+    componentWillMount: function componentWillMount() {
+        var ref = new Firebase("https://compliment-time.firebaseio.com/compliments");
+        this.bindAsArray(ref, "compliments");
+    },
+
+    render: function render() {
+        var compliments = this.state.compliments.map(function (compliment) {
+            return _react2.default.createElement(
+                "li",
+                { key: compliment['.key'] },
+                compliment.name,
+                " says ",
+                compliment.value,
+                " "
+            );
+        });
+
+        return _react2.default.createElement(
+            "ul",
+            null,
+            compliments
+        );
+    }
+
+});
+});
+
+require.register("components/index.jsx", function(exports, require, module) {
+"use strict";
+});
+
+;require.register("initialize.js", function(exports, require, module) {
+'use strict';
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _App = require('components/App');
+
+var _App2 = _interopRequireDefault(_App);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  _reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.querySelector('#app'));
+});
+});
+
+require.register("socket.js", function(exports, require, module) {
+'use strict';
+
+var socket = io();
+socket.on('server event', function (data) {
+  console.log(data);
+  socket.emit('client event', { socket: 'io' });
+});
+});
+
+require.alias("process/browser.js", "process");process = require('process');require.register("___globals___", function(exports, require, module) {
+  
+});})();require('___globals___');
+
+
+//# sourceMappingURL=app.js.map

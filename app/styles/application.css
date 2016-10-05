@@ -31,7 +31,7 @@ a:hover {
   border-bottom: 1px solid #27552e;
 }
 
-compliment {
+compliment-component {
   margin-top: 100px;
   height: 10em;
   display: flex;
@@ -49,6 +49,6 @@ compliment {
   transform: translate(-50%, -50%)
 }
 
-compliment:hover {
+compliment-component:hover {
   cursor: pointer;
 }

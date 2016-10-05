@@ -1,3 +1,6 @@
+### React Brunch has been depreciated, use Babel Brunch instead:
+- https://github.com/babel/babel-brunch
+
 # Brunch + React + Babel/ES6 + Express
 
 This is a modern JS skeleton with React using [Brunch](http://brunch.io).
