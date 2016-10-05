@@ -18,7 +18,7 @@ class ComplimentComponent extends React.Component{
     render() {
         console.log(this.props)
         return (
-        <div>GO YOU</div>
+        <div></div>
         )
     }
 }

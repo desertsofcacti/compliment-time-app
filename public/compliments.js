@@ -29,7 +29,7 @@ var complimentsArray = [
     "You turn strangers to friends with ease"
 ];
 
-var randomIndex = Math.floor(Math.random() * textArray.length);
-var randomElement = textArray[randomIndex];
+var randomIndex = Math.floor(Math.random() * complimentsArray.length);
+var randomElement = complimentsArray[randomIndex];
 
-document.getElementById("compliment-element").innerHTML = randomElement;
+document.getElementById("compliment").innerHTML = randomElement;
