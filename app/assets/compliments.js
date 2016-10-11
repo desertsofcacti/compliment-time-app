@@ -26,7 +26,18 @@ var complimentsArray = [
     "You are productive",
     "You are an encouraging person",
     "You are an approachable individual",
-    "You turn strangers to friends with ease"
+    "You turn strangers to friends with ease",
+    "You belong and are accepted",
+    "You matter to many people",
+    "You have strong hands capable of woodworking",
+    "You have worth",
+    "You are a positive addition to this world",
+    "You smell nice",
+    "You order well at resturarunts",
+    "Even if you think you can't swim, you probablly can",
+    "You have excellent insights ",
+    "You are good at guessing when a traffic light will turn green",
+    "Everyone at work has nice things to say about you"
 ];
 
 var randomIndex = Math.floor(Math.random() * complimentsArray.length);
