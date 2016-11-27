@@ -14,7 +14,7 @@ body {
 
 .compliment {
   position: relative;
-  margin-top: 200px;
+  margin-top: 150px;
   height: 10em;
   display: flex;
   align-items: center;
@@ -24,7 +24,7 @@ body {
 .compliment p {
     font-family: helvetica;
     color: #F012BE;
-    font-size: 3.3em;
+    font-size: 2.3em;
     font-weight: bold;
     margin: 0;
     position: absolute;
