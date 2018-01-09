@@ -37,7 +37,8 @@ var complimentsArray = [
     "Even if you think you can't swim, you probablly can",
     "You have excellent insights ",
     "You are good at guessing when a traffic light will turn green",
-    "Everyone at work has nice things to say about you"
+    "Everyone at work has nice things to say about you".
+    "You seem really fun"
 ];
 
 var randomIndex = Math.floor(Math.random() * complimentsArray.length);
