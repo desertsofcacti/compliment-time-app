@@ -24,7 +24,7 @@ body {
 .compliment p {
     font-family: helvetica;
     color: #F012BE;
-    font-size: 2.3em;
+    font-size: 1.7em;
     font-weight: bold;
     margin: 0;
     position: absolute;
@@ -176,8 +176,8 @@ div {
  width:  40px;
  cursor: pointer;
  /*background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");*/
- background-image: url("/images/heart.png");
- background-repeat: no-repeat;
+ /* background-image: url("/images/heart.png"); */
+ /* background-repeat: no-repeat; */
  background-size: contain;
 }
 
@@ -195,13 +195,16 @@ div {
 
  /* non-critical appearance styles */
  list-style: none;
- background: indigo;
+ background: #67176A;
 }
 
 /* Navigation Menu - List items */
 .nav-item {
  /* non-critical appearance styles */
+ margin-top: 10px;
  width: 200px;
+ margin-left: 40px;
+ color: #EE13B6;
  /*border-top: 1px solid #111;*/
  /*border-bottom: 1px solid #000;*/
 }
@@ -251,17 +254,19 @@ div {
 label[for="nav-trigger"] {
  /* critical positioning styles */
  position: fixed;
- left: 15px; top: 15px;
+ left: 20px; top: 20px;
  z-index: 2;
 
  /* non-critical apperance styles */
- height: 70px;
- width:  70px;
+ height: 40px;
+ width:  40px;
  cursor: pointer;
- /*background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");*/
- background-image: url("/images/hamburger.png");
+ /* background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>"); */
+ /* background-image: url("/images/hamburger.png"); */
+ background-image: url("/images/hamburger.svg");
  background-repeat: no-repeat;
  background-size: contain;
+
 }
 
 /* Make the Magic Happen */
@@ -278,6 +283,14 @@ label[for="nav-trigger"] {
  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
 
+.brand {
+    width:  100px;
+    height: 100px;
+    margin-left: 50px;
+    margin-top: 70%;
+    background-image: url("/images/brand.svg");
+    background-repeat: no-repeat;
+}
 body {
    /* Without this, the body has excess horizontal scroll when the menu is open */
  overflow-x: hidden;
