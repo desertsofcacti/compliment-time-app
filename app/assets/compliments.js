@@ -10,7 +10,7 @@ var complimentsArray = [
     "You have great style",
     "You are patient",
     "You are kind",
-    "You are a sexy parallel parker",
+    "You are a great parallel parker",
     "The food you make is DELICIOUS",
     "You are smart",
     "You are a good listener",
